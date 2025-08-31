@@ -9,11 +9,27 @@ import static net.logstash.logback.argument.StructuredArguments.kv;
 @RestController
 public class UserController {
 
+    private final LogSseController logSseController;
+
+    public UserController(LogSseController logSseController) {
+        this.logSseController = logSseController;
+    }
+
     @GetMapping("/create-user")
     public String createUser() {
-        log.info("Novo usuário criado",
-                kv("userId", "123"),
-                kv("username", "luis"));
+        String jsonLog = """
+        {
+            "timestamp":"%s",
+            "level":"INFO",
+            "message":"Novo usuário criado",
+            "userId":"123",
+            "username":"luis"
+        }
+        """.formatted(java.time.Instant.now());
+
+        log.info("Novo usuário criado");
+        logSseController.sendLog(jsonLog); // envia para todos clientes SSE
         return "Usuário criado!";
     }
 }
+
