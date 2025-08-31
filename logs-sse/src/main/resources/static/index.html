@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs</title>
+</head>
+<body>
+<h1>Logs</h1>
+<pre id="logs"></pre>
+
+<script>
+    const logsContainer = document.getElementById("logs");
+    const source = new EventSource("/logs/stream");
+
+    source.addEventListener("log", (event) => {
+        const log = JSON.parse(event.data);
+        console.log("Log SSE:", log);
+
+        logsContainer.textContent += JSON.stringify(log, null, 2) + "\n";
+    });
+
+    source.onerror = (err) => {
+        console.error("Erro SSE:", err);
+    };
+</script>
+</body>
+</html>
