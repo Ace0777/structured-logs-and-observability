@@ -25,17 +25,14 @@ public class NetworkController {
         this.logSseController = logSseController;
     }
 
-    @Scheduled(fixedRate = 5000) ***REMOVED***
+    @Scheduled(fixedRate = 5000)
     public void generateFakeNetworkLog() throws JsonProcessingException {
         NetworkLog logEntry = logGenerator.generate();
 
-        ***REMOVED***
         String jsonLog = objectMapper.writeValueAsString(logEntry);
 
-        ***REMOVED***
         logSseController.sendLog(jsonLog);
 
-        ***REMOVED***
         log.info("[{}][{}] {} -> {} : {}",
                 logEntry.getHost(),
                 logEntry.getLevel(),

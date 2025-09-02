@@ -5,10 +5,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import lombok.Setter;
 import net.logstash.logback.encoder.LogstashEncoder;
-
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
 
 public class SseLogAppender extends AppenderBase<ILoggingEvent> {
 

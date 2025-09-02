@@ -12,7 +12,6 @@ public class LogsSseApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LogsSseApplication.class, args);
-		log.info("testee");
 	}
 
 }

@@ -24,7 +24,6 @@
 
             rootLogger.addAppender(sseAppender);
 
-            System.out.println("SseLogAppender iniciado e adicionado ao root logger");
         }
 
     }
