@@ -2,11 +2,62 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Logs</title>
+    <title>Painel de Logs</title>
+    <style>
+        body {
+            font-family: "Courier New", monospace;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #logs {
+            background-color: #2a2a40;
+            padding: 15px;
+            border-radius: 10px;
+            height: 80vh;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .INFO {
+            color: #00ff00;
+        }
+
+        .WARN {
+            color: #ffff00;
+        }
+
+        .ERROR {
+            color: #ff4c4c;
+        }
+
+        .host {
+            font-weight: bold;
+        }
+
+        .timestamp {
+            color: #999999;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-<h1>Logs</h1>
-<pre id="logs"></pre>
+<h1>Painel de Logs</h1>
+<div id="logs"></div>
 
 <script>
     const logsContainer = document.getElementById("logs");
@@ -14,9 +65,24 @@
 
     source.addEventListener("log", (event) => {
         const log = JSON.parse(event.data);
-        console.log("Log SSE:", log);
 
-        logsContainer.textContent += JSON.stringify(log, null, 2) + "\n";
+
+        const entry = document.createElement("div");
+        entry.classList.add("log-entry");
+        entry.classList.add(log.level || "INFO");
+
+        const timestamp = log.timestamp || new Date().toISOString();
+        const host = log.host || "unknown";
+        const message = log.message || JSON.stringify(log);
+
+        entry.innerHTML = `<span class="timestamp">[${timestamp}]</span>` +
+                          `<span class="host">${host}</span> ` +
+                          `${message}`;
+
+        logsContainer.appendChild(entry);
+
+
+        logsContainer.scrollTop = logsContainer.scrollHeight;
     });
 
     source.onerror = (err) => {
